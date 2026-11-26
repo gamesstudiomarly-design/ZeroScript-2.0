@@ -1,0 +1,440 @@
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+	<External>null</External>
+	<External>nil</External>
+	<Item class="Script" referent="RBX13B58378659D4B57A8F12C8137D7D0B4">
+		<Properties>
+			<ProtectedString name="Source"><![CDATA[local HttpService = game:GetService("HttpService")
+
+local toolbar = plugin:CreateToolbar("ZeroScript 2.0")
+local toggleBtn = toolbar:CreateButton("Ultimate IDE", "Open ZeroScript Ultimate Studio", "rbxassetid://6031075931")
+
+local widgetInfo = DockWidgetPluginGuiInfo.new(
+	Enum.InitialDockState.Right, false, false, 1000, 700, 800, 500
+)
+local widget = plugin:CreateDockWidgetPluginGui("ZeroScriptUltimate", widgetInfo)
+widget.Title = "ZeroScript 2.0 - Ultimate IDE"
+
+local C_BG = Color3.fromRGB(11, 13, 20)
+local C_PANEL = Color3.fromRGB(22, 25, 37)
+local C_TEXT = Color3.fromRGB(230, 232, 240)
+local C_MUTED = Color3.fromRGB(139, 144, 168)
+local C_ACCENT = Color3.fromRGB(124, 92, 255)
+local C_CYAN = Color3.fromRGB(34, 211, 238)
+local C_ERR = Color3.fromRGB(239, 68, 68)
+local C_OK = Color3.fromRGB(34, 197, 94)
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(1, 0, 1, 0)
+mainFrame.BackgroundColor3 = C_BG
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = widget
+
+local topBar = Instance.new("Frame")
+topBar.Size = UDim2.new(1, 0, 0, 80)
+topBar.BackgroundColor3 = C_PANEL
+topBar.BorderSizePixel = 0
+topBar.Parent = mainFrame
+
+-- Search
+local searchBox = Instance.new("TextBox")
+searchBox.Size = UDim2.new(0.35, -15, 0, 26)
+searchBox.Position = UDim2.new(0, 10, 0, 7)
+searchBox.BackgroundColor3 = C_BG
+searchBox.TextColor3 = C_TEXT
+searchBox.PlaceholderText = "🔍 Search scripts..."
+searchBox.PlaceholderColor3 = C_MUTED
+searchBox.Font = Enum.Font.Code
+searchBox.TextSize = 13
+searchBox.Parent = topBar
+
+-- Row 1 Buttons
+local btnOpenNative = Instance.new("TextButton")
+btnOpenNative.Size = UDim2.new(0.15, -10, 0, 26)
+btnOpenNative.Position = UDim2.new(0.35, 5, 0, 7)
+btnOpenNative.BackgroundColor3 = Color3.fromRGB(59, 130, 246)
+btnOpenNative.Text = "📂 Open Studio"
+btnOpenNative.TextColor3 = Color3.new(1,1,1)
+btnOpenNative.Font = Enum.Font.GothamBold
+btnOpenNative.TextSize = 11
+btnOpenNative.Parent = topBar
+
+local btnRun = Instance.new("TextButton")
+btnRun.Size = UDim2.new(0.15, -10, 0, 26)
+btnRun.Position = UDim2.new(0.50, 5, 0, 7)
+btnRun.BackgroundColor3 = C_ACCENT
+btnRun.Text = "▶ Run"
+btnRun.TextColor3 = Color3.new(1,1,1)
+btnRun.Font = Enum.Font.GothamBold
+btnRun.TextSize = 11
+btnRun.Parent = topBar
+
+local btnSync = Instance.new("TextButton")
+btnSync.Size = UDim2.new(0.15, -10, 0, 26)
+btnSync.Position = UDim2.new(0.65, 5, 0, 7)
+btnSync.BackgroundColor3 = C_CYAN
+btnSync.Text = "☁ Sync Web"
+btnSync.TextColor3 = Color3.new(1,1,1)
+btnSync.Font = Enum.Font.GothamBold
+btnSync.TextSize = 11
+btnSync.Parent = topBar
+
+local btnConnect = Instance.new("TextButton")
+btnConnect.Size = UDim2.new(0.15, -10, 0, 26)
+btnConnect.Position = UDim2.new(0.80, 5, 0, 7)
+btnConnect.BackgroundColor3 = C_OK
+btnConnect.Text = "🔌 Connect"
+btnConnect.TextColor3 = Color3.new(1,1,1)
+btnConnect.Font = Enum.Font.GothamBold
+btnConnect.TextSize = 11
+btnConnect.Parent = topBar
+
+-- Row 2 Tools
+local findBox = Instance.new("TextBox")
+findBox.Size = UDim2.new(0.15, -10, 0, 26)
+findBox.Position = UDim2.new(0, 10, 0, 40)
+findBox.BackgroundColor3 = C_BG
+findBox.TextColor3 = C_TEXT
+findBox.PlaceholderText = "Find..."
+findBox.PlaceholderColor3 = C_MUTED
+findBox.Font = Enum.Font.Code
+findBox.TextSize = 13
+findBox.Parent = topBar
+
+local replaceBox = Instance.new("TextBox")
+replaceBox.Size = UDim2.new(0.15, -10, 0, 26)
+replaceBox.Position = UDim2.new(0.15, 5, 0, 40)
+replaceBox.BackgroundColor3 = C_BG
+replaceBox.TextColor3 = C_TEXT
+replaceBox.PlaceholderText = "Replace..."
+replaceBox.PlaceholderColor3 = C_MUTED
+replaceBox.Font = Enum.Font.Code
+replaceBox.TextSize = 13
+replaceBox.Parent = topBar
+
+local btnReplaceAll = Instance.new("TextButton")
+btnReplaceAll.Size = UDim2.new(0.15, -10, 0, 26)
+btnReplaceAll.Position = UDim2.new(0.30, 5, 0, 40)
+btnReplaceAll.BackgroundColor3 = Color3.fromRGB(249, 115, 22)
+btnReplaceAll.Text = "Replace All"
+btnReplaceAll.TextColor3 = Color3.new(1,1,1)
+btnReplaceAll.Font = Enum.Font.GothamBold
+btnReplaceAll.TextSize = 11
+btnReplaceAll.Parent = topBar
+
+local btnFormat = Instance.new("TextButton")
+btnFormat.Size = UDim2.new(0.12, -10, 0, 26)
+btnFormat.Position = UDim2.new(0.45, 5, 0, 40)
+btnFormat.BackgroundColor3 = C_PANEL
+btnFormat.Text = "✨ Format"
+btnFormat.TextColor3 = C_TEXT
+btnFormat.Font = Enum.Font.GothamBold
+btnFormat.TextSize = 11
+btnFormat.Parent = topBar
+
+local btnFix = Instance.new("TextButton")
+btnFix.Size = UDim2.new(0.12, -10, 0, 26)
+btnFix.Position = UDim2.new(0.57, 5, 0, 40)
+btnFix.BackgroundColor3 = C_ERR
+btnFix.Text = "🔧 AI Fix"
+btnFix.TextColor3 = Color3.new(1,1,1)
+btnFix.Font = Enum.Font.GothamBold
+btnFix.TextSize = 11
+btnFix.Parent = topBar
+
+local btnTrash = Instance.new("TextButton")
+btnTrash.Size = UDim2.new(0.28, -10, 0, 26)
+btnTrash.Position = UDim2.new(0.70, 5, 0, 40)
+btnTrash.BackgroundColor3 = Color3.fromRGB(153, 27, 27)
+btnTrash.Text = "🗑 Move All to Trash"
+btnTrash.TextColor3 = Color3.new(1,1,1)
+btnTrash.Font = Enum.Font.GothamBold
+btnTrash.TextSize = 11
+btnTrash.Parent = topBar
+
+-- Left Panel
+local leftPanel = Instance.new("Frame")
+leftPanel.Size = UDim2.new(0.25, 0, 1, -110)
+leftPanel.Position = UDim2.new(0, 0, 0, 80)
+leftPanel.BackgroundColor3 = C_PANEL
+leftPanel.BorderSizePixel = 0
+leftPanel.Parent = mainFrame
+
+local scriptList = Instance.new("ScrollingFrame")
+scriptList.Size = UDim2.new(1, 0, 1, 0)
+scriptList.BackgroundTransparency = 1
+scriptList.ScrollBarThickness = 6
+scriptList.Parent = leftPanel
+
+-- Live Console
+local consoleFrame = Instance.new("Frame")
+consoleFrame.Size = UDim2.new(0.25, 0, 0.3, 0)
+consoleFrame.Position = UDim2.new(0, 0, 0.7, 0)
+consoleFrame.BackgroundColor3 = Color3.fromRGB(18, 20, 29)
+consoleFrame.Parent = mainFrame
+
+local consoleLog = Instance.new("TextLabel")
+consoleLog.Size = UDim2.new(1, -10, 1, -20)
+consoleLog.Position = UDim2.new(0, 5, 0, 20)
+consoleLog.BackgroundTransparency = 1
+consoleLog.Text = "Waiting for bridge...\n"
+consoleLog.TextColor3 = C_MUTED
+consoleLog.Font = Enum.Font.Code
+consoleLog.TextSize = 11
+consoleLog.TextYAlignment = Enum.TextYAlignment.Bottom
+consoleLog.TextXAlignment = Enum.TextXAlignment.Left
+consoleLog.Parent = consoleFrame
+
+-- Right Panel
+local rightPanel = Instance.new("Frame")
+rightPanel.Size = UDim2.new(0.75, 0, 1, -80)
+rightPanel.Position = UDim2.new(0.25, 0, 0, 80)
+rightPanel.BackgroundColor3 = C_BG
+rightPanel.Parent = mainFrame
+
+local codeBox = Instance.new("TextBox")
+codeBox.Size = UDim2.new(1, -20, 1, -20)
+codeBox.Position = UDim2.new(0, 10, 0, 10)
+codeBox.BackgroundColor3 = C_BG
+codeBox.TextColor3 = C_TEXT
+codeBox.Font = Enum.Font.Code
+codeBox.TextSize = 14
+codeBox.TextXAlignment = Enum.TextXAlignment.Left
+codeBox.TextYAlignment = Enum.TextYAlignment.Top
+codeBox.MultiLine = true
+codeBox.ClearTextOnFocus = false
+codeBox.Text = ""
+codeBox.Parent = rightPanel
+
+-- ==========================================
+-- LOGIC
+-- ==========================================
+local activeScript = nil
+local currentFilteredScripts = {}
+
+local function sendLog(msg)
+	task.spawn(function()
+		pcall(function()
+			local payload = HttpService:JSONEncode({message = msg})
+			HttpService:PostAsync("http://127.0.0.1:17614/api2/studio/log", payload, Enum.HttpContentType.ApplicationJson)
+		end)
+	end)
+end
+
+local function apiPost(endpoint, body)
+	local payload = HttpService:JSONEncode(body)
+	local success, response = pcall(function()
+		return HttpService:PostAsync("http://127.0.0.1:17614" .. endpoint, payload, Enum.HttpContentType.ApplicationJson)
+	end)
+	if success then
+		return HttpService:JSONDecode(response)
+	else
+		return { ok = false, error = tostring(response) }
+	end
+end
+
+local function openScript(scriptObj)
+	activeScript = scriptObj
+	codeBox.Text = scriptObj.Source
+	sendLog("Selected script: " .. scriptObj.Name)
+end
+
+local function refreshExplorer(filterText)
+	scriptList:ClearAllChildren()
+	local layout = Instance.new("UIListLayout", scriptList)
+	layout.Padding = UDim.new(0, 2)
+	layout.SortOrder = Enum.SortOrder.Name
+
+	filterText = filterText:lower()
+	currentFilteredScripts = {}
+
+	for _, obj in ipairs(game:GetDescendants()) do
+		if obj:IsA("Script") or obj:IsA("LocalScript") or obj:IsA("ModuleScript") then
+			if filterText == "" or obj.Name:lower():find(filterText) then
+				table.insert(currentFilteredScripts, obj)
+				local btn = Instance.new("TextButton")
+				btn.Size = UDim2.new(1, -6, 0, 24)
+				btn.BackgroundColor3 = C_PANEL
+				btn.Text = "  📄 " .. obj.Name
+				btn.TextColor3 = C_TEXT
+				btn.Font = Enum.Font.Code
+				btn.TextSize = 12
+				btn.TextXAlignment = Enum.TextXAlignment.Left
+				btn.Parent = scriptList
+				btn.MouseButton1Click:Connect(function() openScript(obj) end)
+			end
+		end
+	end
+end
+
+task.spawn(function()
+	while true do
+		task.wait(5)
+		local res = apiPost("/api2/studio/format", { code = "ping" })
+		if res and res.ok then
+			consoleLog.Text = "[Connected] Bridge is Online.\n"
+			consoleLog.TextColor3 = C_OK
+		else
+			consoleLog.Text = "[Offline] Bridge not found.\nMake sure app2.py is running."
+			consoleLog.TextColor3 = C_ERR
+		end
+	end
+end)
+
+-- ==========================================
+-- BUTTON ACTIONS
+-- ==========================================
+btnConnect.MouseButton1Click:Connect(function()
+	consoleLog.Text = "Pinging Python backend..."
+	sendLog("Clicked: Connect Tool")
+	local res = apiPost("/api2/studio/format", { code = "ping" })
+	if res and res.ok then
+		consoleLog.Text = "✅ Connected! Backend is running."
+		consoleLog.TextColor3 = C_OK
+		sendLog("Result: Connected successfully.")
+	else
+		consoleLog.Text = "❌ Offline! Check app2.py terminal."
+		consoleLog.TextColor3 = C_ERR
+		sendLog("Result: Connection failed.")
+	end
+end)
+
+btnTrash.MouseButton1Click:Connect(function()
+	sendLog("Clicked: Move All to Trash")
+	local trash = game:GetService("ServerStorage"):FindFirstChild("ZeroScript_Trash")
+	if not trash then
+		trash = Instance.new("Folder")
+		trash.Name = "ZeroScript_Trash"
+		trash.Parent = game:GetService("ServerStorage")
+	end
+
+	local count = 0
+	for _, obj in ipairs(game:GetDescendants()) do
+		if obj:IsA("Script") or obj:IsA("LocalScript") or obj:IsA("ModuleScript") then
+			if not obj:IsDescendantOf(trash) then
+				obj.Parent = trash
+				count = count + 1
+			end
+		end
+	end
+	refreshExplorer("")
+	consoleLog.Text = "⚠️ Moved " .. count .. " scripts to Trash folder!"
+	consoleLog.TextColor3 = C_ERR
+	sendLog("Moved " .. count .. " scripts to ServerStorage.ZeroScript_Trash")
+end)
+
+btnFormat.MouseButton1Click:Connect(function()
+	if not activeScript then return end
+	sendLog("Clicked: Format Code on " .. activeScript.Name)
+	consoleLog.Text = "Formatting code..."
+	local res = apiPost("/api2/studio/format", { code = codeBox.Text })
+	if res.ok then
+		codeBox.Text = res.result.code
+		activeScript.Source = codeBox.Text
+		consoleLog.Text = "✅ Formatted successfully."
+		consoleLog.TextColor3 = C_OK
+		sendLog("Formatted successfully.")
+	else
+		consoleLog.Text = "❌ Format failed."
+		sendLog("Format failed.")
+	end
+end)
+
+btnFix.MouseButton1Click:Connect(function()
+	if not activeScript then return end
+	sendLog("Clicked: AI Fix on " .. activeScript.Name)
+	consoleLog.Text = "AI fixing code..."
+	local res = apiPost("/api2/studio/ai_fix", { code = codeBox.Text })
+	if res.ok then
+		codeBox.Text = res.result.code
+		activeScript.Source = codeBox.Text
+		consoleLog.Text = "✅ Fixed by AI."
+		consoleLog.TextColor3 = C_OK
+		sendLog("AI Fix applied successfully.")
+	else
+		consoleLog.Text = "❌ AI Fix failed."
+		sendLog("AI Fix failed.")
+	end
+end)
+
+btnReplaceAll.MouseButton1Click:Connect(function()
+	local find = findBox.Text
+	local replace = replaceBox.Text
+	if find == "" then return end
+
+	sendLog("Clicked: Replace All ("..find.." -> "..replace..")")
+	local count = 0
+	for _, scriptObj in ipairs(currentFilteredScripts) do
+		local newSource, hits = scriptObj.Source:gsub(find, replace)
+		if hits > 0 then
+			scriptObj.Source = newSource
+			count = count + 1
+		end
+	end
+	consoleLog.Text = "✅ Replaced in "..count.." scripts."
+	sendLog("Replaced in "..count.." scripts.")
+end)
+
+btnOpenNative.MouseButton1Click:Connect(function()
+	if activeScript then
+		plugin:OpenScript(activeScript)
+		sendLog("Opened " .. activeScript.Name .. " in Studio Editor")
+	end
+end)
+
+btnRun.MouseButton1Click:Connect(function()
+	if not activeScript then return end
+	sendLog("Clicked: Run Code for " .. activeScript.Name)
+	activeScript.Source = codeBox.Text
+	local success, err = pcall(function()
+		local fn = loadstring(codeBox.Text)
+		if fn then fn() end
+	end)
+	if not success then 
+		warn("Run Error: " .. tostring(err)) 
+		sendLog("Run Error: " .. tostring(err))
+	else
+		sendLog("Code executed successfully.")
+	end
+end)
+
+btnSync.MouseButton1Click:Connect(function()
+	if not activeScript then return end
+	sendLog("Clicked: Sync Web for " .. activeScript.Name)
+	activeScript.Source = codeBox.Text
+	local res = apiPost("/api2/studio/run", { code = codeBox.Text })
+	if res.ok then
+		consoleLog.Text = "✅ Synced to Web Dashboard."
+		sendLog("Synced to Web.")
+	else
+		consoleLog.Text = "❌ Sync failed."
+		sendLog("Sync to Web failed.")
+	end
+end)
+
+searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+	refreshExplorer(searchBox.Text)
+end)
+
+toggleBtn.Click:Connect(function()
+	widget.Enabled = not widget.Enabled
+	if widget.Enabled then refreshExplorer("") end
+end)
+
+refreshExplorer("")]]></ProtectedString>
+			<bool name="Disabled">false</bool>
+			<Content name="LinkedSource"><null></null></Content>
+			<token name="RunContext">0</token>
+			<string name="ScriptGuid">{02C26064-2C24-40D5-9615-0E56BFF661EE}</string>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<string name="Name">ZeroScriptPlugin</string>
+			<BinaryString name="SerializedOverrides"></BinaryString>
+			<int64 name="SourceAssetId">-1</int64>
+			<SharedString name="Tags">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
+		</Properties>
+	</Item>
+	<SharedStrings>
+		<SharedString md5="yuZpQdnvvUBOTYh1jqZ2cA=="></SharedString>
+	</SharedStrings>
+</roblox>
