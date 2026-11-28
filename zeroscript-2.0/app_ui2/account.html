@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZeroScript — Account</title>
+<link rel="stylesheet" href="/2/login.css">
+<link rel="stylesheet" href="/2/account.css">
+</head>
+<body class="acct-body">
+<div class="zs-auth-bg" aria-hidden="true">
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+  <div class="grid-lines"></div>
+</div>
+
+<main class="acct-shell">
+
+  <!-- ── Header ────────────────────────────────────────────────── -->
+  <header class="acct-top">
+    <a class="brand-lockup" href="/2/" style="text-decoration:none">
+      <span class="brand-mark" aria-hidden="true">Z</span>
+      <span class="brand-text">
+        <b>ZEROSCRIPT</b>
+        <small>ACCOUNT</small>
+      </span>
+    </a>
+    <div class="acct-top-actions">
+      <a class="btn primary sm" id="btn-admin-panel" href="/admin" hidden>Open Admin Panel</a>
+      <a class="btn ghost sm" href="/2/">← Back to workspace</a>
+      <button class="btn ghost sm" id="btn-logout">Sign out</button>
+      <button class="btn ghost sm danger" id="btn-logout-all">Sign out all devices</button>
+    </div>
+  </header>
+
+  <!-- ── Identity card ─────────────────────────────────────────── -->
+  <section class="acct-identity">
+    <div class="acct-avatar" id="acct-avatar" aria-hidden="true"><span id="acct-initial">Z</span></div>
+    <div class="acct-ident-text">
+      <div class="acct-name-row">
+        <h1 id="acct-name">…</h1>
+        <span class="membership-badge" id="acct-badge">FREE</span>
+        <span class="verified-chip" id="acct-verified" hidden>verified</span>
+      </div>
+      <p id="acct-email">…</p>
+      <p class="acct-meta" id="acct-created">…</p>
+    </div>
+    <div class="acct-usage">
+      <div class="usage-ring" id="acct-usage-ring"><b id="acct-usage-used">0</b><small id="acct-usage-limit">/ 0</small></div>
+      <small class="acct-meta">AI requests today</small>
+    </div>
+  </section>
+
+  <div class="acct-grid">
+
+    <!-- ── Profile ─────────────────────────────────────────────── -->
+    <section class="acct-card">
+      <header class="acct-card-head">
+        <h2>Profile</h2>
+        <p>Your public identity inside ZeroScript.</p>
+      </header>
+
+      <div class="banner" id="profile-banner" hidden></div>
+
+      <div class="acct-avatar-row">
+        <div class="acct-avatar sm" id="acct-avatar-preview" aria-hidden="true"><span id="acct-initial-2">Z</span></div>
+        <div>
+          <label class="btn ghost sm" for="avatar-file">Change picture</label>
+          <input id="avatar-file" type="file" accept="image/png,image/jpeg,image/gif,image/webp" hidden>
+          <button class="btn ghost sm" id="avatar-remove" type="button">Remove picture</button>
+        </div>
+      </div>
+
+      <form id="profile-form" novalidate>
+        <label class="field">
+          <span class="field-label">Username</span>
+          <span class="input-wrap">
+            <input id="profile-username" name="username" type="text" maxlength="24" required spellcheck="false">
+          </span>
+          <small class="field-error" data-error-for="username"></small>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Email address</span>
+          <span class="input-wrap">
+            <input id="profile-email" name="email" type="email" required spellcheck="false">
+          </span>
+          <small class="field-hint">Changing this requires a new verification.</small>
+          <small class="field-error" data-error-for="email"></small>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Display name</span>
+          <span class="input-wrap">
+            <input id="profile-display" name="displayName" type="text" maxlength="60">
+          </span>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Bio</span>
+          <span class="input-wrap">
+            <input id="profile-bio" name="bio" type="text" maxlength="400"
+                   placeholder="What are you building?">
+          </span>
+        </label>
+
+        <button class="btn primary" type="submit" id="profile-save">
+          <span class="btn-label">Save profile</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- ── Membership ──────────────────────────────────────────── -->
+    <section class="acct-card">
+      <header class="acct-card-head">
+        <h2>Membership</h2>
+        <p>Your plan is verified by the server, never by the browser.</p>
+      </header>
+
+      <div class="banner" id="membership-banner" hidden></div>
+
+      <div class="plan-current" id="plan-current">
+        <span class="plan-dot" id="plan-dot"></span>
+        <div>
+          <b id="plan-name">—</b>
+          <small id="plan-detail">—</small>
+        </div>
+      </div>
+
+      <div class="plan-grid" id="plan-grid"></div>
+
+      <div class="billing-note" id="billing-note">
+        Prices and entitlements come from the server catalogue. A paid plan is
+        only activated after the server verifies the checkout.
+      </div>
+    </section>
+
+    <!-- ── Password ────────────────────────────────────────────── -->
+    <section class="acct-card">
+      <header class="acct-card-head">
+        <h2>Change password</h2>
+        <p>Every other device is signed out when the password changes.</p>
+      </header>
+
+      <div class="banner" id="password-banner" hidden></div>
+
+      <form id="password-form" novalidate>
+        <label class="field">
+          <span class="field-label">Current password</span>
+          <span class="input-wrap">
+            <input id="pw-current" name="currentPassword" type="password"
+                   autocomplete="current-password" required>
+            <button type="button" class="toggle-pw" data-toggle="pw-current"
+                    aria-label="Show password" aria-pressed="false">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
+                   stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z"/>
+                <circle cx="12" cy="12" r="2.6"/>
+              </svg>
+            </button>
+          </span>
+          <small class="field-error" data-error-for="currentPassword"></small>
+        </label>
+
+        <label class="field">
+          <span class="field-label">New password</span>
+          <span class="input-wrap">
+            <input id="pw-new" name="password" type="password"
+                   autocomplete="new-password" required placeholder="At least 8 characters">
+            <button type="button" class="toggle-pw" data-toggle="pw-new"
+                    aria-label="Show password" aria-pressed="false">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
+                   stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z"/>
+                <circle cx="12" cy="12" r="2.6"/>
+              </svg>
+            </button>
+          </span>
+          <small class="field-error" data-error-for="password"></small>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Confirm new password</span>
+          <span class="input-wrap">
+            <input id="pw-confirm" name="confirmPassword" type="password"
+                   autocomplete="new-password" required placeholder="Repeat your new password">
+            <button type="button" class="toggle-pw" data-toggle="pw-confirm"
+                    aria-label="Show password" aria-pressed="false">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor"
+                   stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z"/>
+                <circle cx="12" cy="12" r="2.6"/>
+              </svg>
+            </button>
+          </span>
+          <small class="field-error" data-error-for="confirmPassword"></small>
+        </label>
+
+        <button class="btn primary" type="submit" id="password-save">
+          <span class="btn-label">Update password</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- ── AI conversations ────────────────────────────────────── -->
+    <section class="acct-card">
+      <header class="acct-card-head">
+        <h2>AI conversations</h2>
+        <p>Every Studio MCP tool call and saved message, stored automatically.</p>
+      </header>
+
+      <div class="banner" id="chat-banner" hidden></div>
+
+      <div class="notice-list" id="chat-list"></div>
+
+      <div class="acct-card-actions">
+        <button class="btn ghost" id="btn-refresh-chat">Refresh</button>
+      </div>
+    </section>
+
+    <!-- ── Devices ─────────────────────────────────────────────── -->
+    <section class="acct-card">
+      <header class="acct-card-head">
+        <h2>Sessions &amp; devices</h2>
+        <p>Devices currently signed in to this account.</p>
+      </header>
+
+      <div class="banner" id="devices-banner" hidden></div>
+
+      <div class="device-list" id="device-list"></div>
+
+      <div class="acct-card-actions">
+        <button class="btn ghost" id="btn-refresh-sessions">Refresh</button>
+        <button class="btn ghost danger" id="btn-logout-all-2">Sign out all devices</button>
+      </div>
+    </section>
+
+    <!-- ── Notifications ───────────────────────────────────────── -->
+    <section class="acct-card">
+      <header class="acct-card-head">
+        <h2>Notifications</h2>
+        <p>Account activity saved by the server.</p>
+      </header>
+      <div class="notice-list" id="notice-list"></div>
+    </section>
+
+    <!-- ── Data ────────────────────────────────────────────────── -->
+    <section class="acct-card">
+      <header class="acct-card-head">
+        <h2>Data &amp; backup</h2>
+        <p>Save your workspace or export a portable copy of your data.</p>
+      </header>
+
+      <div class="banner" id="data-banner" hidden></div>
+
+      <div class="data-stats" id="data-stats"></div>
+
+      <div class="acct-card-actions">
+        <button class="btn primary" id="btn-save">Save now</button>
+        <button class="btn ghost" id="btn-export">Export backup</button>
+      </div>
+      <small class="acct-meta">Export produces a JSON file with your projects, files,
+        chat history, preferences and membership. Passwords and session tokens are never included.</small>
+    </section>
+
+    <!-- ── Danger zone ─────────────────────────────────────────── -->
+    <section class="acct-card danger-zone">
+      <header class="acct-card-head">
+        <h2>Delete account</h2>
+        <p>Removes the account and everything stored for it on this machine.</p>
+      </header>
+
+      <div class="banner" id="delete-banner" hidden></div>
+
+      <form id="delete-form" novalidate>
+        <label class="field">
+          <span class="field-label">Type <b>DELETE</b> to confirm</span>
+          <span class="input-wrap">
+            <input id="delete-confirm" name="confirm" type="text" autocomplete="off" spellcheck="false">
+          </span>
+          <small class="field-error" data-error-for="confirm"></small>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Your password</span>
+          <span class="input-wrap">
+            <input id="delete-password" name="password" type="password"
+                   autocomplete="current-password">
+          </span>
+          <small class="field-error" data-error-for="password"></small>
+        </label>
+
+        <button class="btn danger block" type="submit" id="delete-submit">
+          <span class="btn-label">Delete my account</span>
+        </button>
+      </form>
+    </section>
+
+  </div>
+
+  <p class="auth-foot">
+    <span id="acct-hash">password hashing: —</span> ·
+    <span id="acct-role">role: —</span>
+  </p>
+</main>
+
+<script src="/2/account.js"></script>
+</body>
+</html>
