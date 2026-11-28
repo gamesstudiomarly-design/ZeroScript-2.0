@@ -1,0 +1,25 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# ZeroScript 2.0 - local runtime state.
+#
+# The SQLite database holds password hashes, session records and personal
+# data. It must never be committed.
+
+# Accounts, sessions, projects, chat history, memberships
+data/
+
+# Workspace state created at runtime
+projects/
+projects_backups/
+script_library/
+script_history/
+snapshots/
+
+# Local admin registry
+admin_data.json
+
+# Runtime logs
+logs/
+
+# Python
+__pycache__/
+*.py[cod]

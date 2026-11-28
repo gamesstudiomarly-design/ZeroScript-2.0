@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ZeroScript 2.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bg: #0b0d14;
+  --bg2: #12141d;
+  --panel: #161925;
+  --panel-2: #1d2130;
+  --text: #e6e8f0;
+  --muted: #8b90a8;
+  --accent: #7c5cff;
+  --accent-2: #22d3ee;
+  --cyan: #22d3ee;
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --err: #ef4444;
+  --border: #262a3a;
+  --radius: 12px;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: radial-gradient(1200px 600px at 20% -10%, rgba(124,92,255,.12), transparent 60%),
+              radial-gradient(1000px 500px at 100% 0%, rgba(34,211,238,.08), transparent 60%),
+              var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+#app { display: flex; height: 100vh; }
+#sidebar {
+  width: 240px; min-width: 200px; resize: horizontal; overflow: auto;
+  background: linear-gradient(180deg, var(--bg2), #0d0f17);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; padding: 16px 12px;
+}
+.brand { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.logo {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  display: grid; place-items: center; font-weight: 800; color: #fff;
+  box-shadow: 0 0 20px rgba(124,92,255,.5);
+}
+.brand-name { font-weight: 700; letter-spacing: .3px; }
+.brand-ver { font-size: 11px; color: var(--muted); }
+#nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.nav-item {
+  background: transparent; color: var(--text); border: none;
+  text-align: left; padding: 10px 12px; border-radius: 8px;
+  cursor: pointer; font-size: 14px; transition: all .15s ease;
+}
+.nav-item:hover { background: var(--panel); }
+.nav-item.active {
+  background: linear-gradient(90deg, rgba(124,92,255,.25), rgba(34,211,238,.12));
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+.sidebar-footer {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; color: var(--muted); padding: 8px; border-top: 1px solid var(--border);
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot.green { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+.dot.yellow { background: var(--warn); box-shadow: 0 0 8px var(--warn); }
+.dot.grey { background: #555; }
+#main { flex: 1; overflow: auto; padding: 24px; }
+.view { display: none; animation: fade .2s ease; }
+.view.active { display: block; }
+@keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+h1 { margin: 0 0 20px; font-size: 22px; }
+h2 { margin: 24px 0 12px; font-size: 16px; color: var(--muted); font-weight: 600; }
+h3 { margin: 0 0 8px; font-size: 13px; color: var(--muted); }
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.kpi {
+  background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 16px; box-shadow: var(--shadow);
+}
+.kpi-val { font-size: 28px; font-weight: 800;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text; background-clip: text; color: transparent; }
+.kpi-lbl { font-size: 12px; color: var(--muted); }
+.toolbar { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
+input, select, textarea {
+  background: var(--panel); border: 1px solid var(--border); color: var(--text);
+  border-radius: 8px; padding: 8px 10px; font-family: inherit; font-size: 13px;
+}
+button {
+  background: linear-gradient(135deg, var(--accent), #6b4dff);
+  color: #fff; border: none; padding: 8px 14px; border-radius: 8px;
+  font-weight: 600; cursor: pointer; font-size: 13px; transition: transform .1s ease;
+}
+button:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(124,92,255,.35); }
+button:active { transform: none; }
+.editor-wrap { display: flex; background: var(--panel); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden; height: 60vh; }
+.line-nums {
+  background: var(--bg2); color: var(--muted); font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; padding: 12px 8px; text-align: right; user-select: none;
+  min-width: 44px; line-height: 1.5; overflow: hidden;
+}
+#editor {
+  flex: 1; background: transparent; border: none; outline: none; resize: none;
+  color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 13px;
+  line-height: 1.5; padding: 12px; tab-size: 4;
+}
+.diags { margin-top: 12px; font-family: monospace; font-size: 12px; }
+.diags .error { color: var(--err); }
+.diags .warning { color: var(--warn); }
+.diags .info { color: var(--accent-2); }
+#ai-input { width: 100%; height: 160px; resize: vertical; font-family: monospace; }
+#ai-output {
+  background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 14px; min-height: 200px; white-space: pre-wrap; font-family: monospace;
+  font-size: 13px; color: #c7cbe0; overflow: auto;
+}
+.debug-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; height: 70vh; }
+.log {
+  background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 10px; overflow: auto; font-family: monospace; font-size: 12px;
+  height: calc(100% - 30px); line-height: 1.6;
+}
+.log .error { color: var(--err); }
+.log .warning { color: var(--warn); }
+.log .info { color: var(--muted); }
+.asset-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+.asset-card {
+  background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 14px; transition: all .15s ease;
+}
+.asset-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.asset-card .fav { color: var(--warn); }
+.list { display: flex; flex-direction: column; gap: 8px; }
+.list-item {
+  background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 12px 14px; display: flex; justify-content: space-between; align-items: center;
+}
+.list-item:hover { border-color: var(--accent); }
+.list-item .meta { font-size: 12px; color: var(--muted); }
+.uibuilder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; height: 65vh; }
+.ui-tree, #ui-code {
+  background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 12px; overflow: auto; font-family: monospace; font-size: 12px;
+}
+.ui-node { padding: 4px 8px; border-left: 2px solid var(--accent); margin: 4px 0;
+  background: var(--panel-2); border-radius: 4px; }
+.quick-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+</style>
+</head>
+<body>
+<div id="app">
+  <aside id="sidebar">
+    <div class="brand">
+      <div class="logo">Z</div>
+      <div>
+        <div class="brand-name">ZeroScript</div>
+        <div class="brand-ver">v2.0</div>
+      </div>
+    </div>
+    <nav id="nav">
+      <button class="nav-item active" data-view="dashboard">🏠 Dashboard</button>
+      <button class="nav-item" data-view="editor">📝 Script Editor</button>
+      <button class="nav-item" data-view="ai">🤖 AI Assistant</button>
+      <button class="nav-item" data-view="studio">🎮 Studio Control</button>
+      <button class="nav-item" data-view="debug">🐞 Debugging</button>
+      <button class="nav-item" data-view="assets">📦 Assets</button>
+      <button class="nav-item" data-view="projects">📁 Projects</button>
+      <button class="nav-item" data-view="uibuilder">🎨 UI Builder</button>
+      <button class="nav-item" data-view="library">📚 Library</button>
+      <button class="nav-item" data-view="plugins">🔌 Plugins</button>
+      <button class="nav-item" data-view="settings">⚙️ Settings</button>
+    </nav>
+    <div class="sidebar-footer">
+      <div id="status-dot" class="dot grey"></div>
+      <span id="status-text">Connecting…</span>
+    </div>
+  </aside>
+
+  <main id="main">
+    <section class="view active" id="view-dashboard">
+      <h1>Welcome back 👋</h1>
+      <div class="kpis">
+        <div class="kpi"><div class="kpi-val" id="kpi-tools">0</div><div class="kpi-lbl">Tools</div></div>
+        <div class="kpi"><div class="kpi-val" id="kpi-errors">0</div><div class="kpi-lbl">Errors</div></div>
+        <div class="kpi"><div class="kpi-val" id="kpi-projects">0</div><div class="kpi-lbl">Projects</div></div>
+        <div class="kpi"><div class="kpi-val" id="kpi-assets">0</div><div class="kpi-lbl">Assets</div></div>
+      </div>
+      <h2>Recent projects</h2>
+      <div id="recent-projects" class="list"></div>
+      <h2>Quick actions</h2>
+      <div class="quick-actions">
+        <button onclick="showView('editor')">New script</button>
+        <button onclick="showView('projects')">Open project</button>
+        <button onclick="showView('ai')">Ask AI</button>
+        <button onclick="showView('debug')">View logs</button>
+      </div>
+    </section>
+
+    <section class="view" id="view-editor">
+      <div class="toolbar">
+        <input id="doc-name" placeholder="Script name" />
+        <button onclick="editorSave()">💾 Save</button>
+        <button onclick="editorFormat()">✨ Format</button>
+        <button onclick="editorDiagnose()">🔍 Diagnose</button>
+      </div>
+      <div class="editor-wrap">
+        <div class="line-nums" id="line-nums"></div>
+        <textarea id="editor" spellcheck="false" placeholder="--!strict&#10;-- Start typing Luau…"></textarea>
+      </div>
+      <div id="editor-diags" class="diags"></div>
+    </section>
+
+    <section class="view" id="view-ai">
+      <div class="toolbar">
+        <select id="ai-action">
+          <option value="generate">Generate</option>
+          <option value="explain">Explain</option>
+          <option value="fix">Fix</option>
+          <option value="optimize">Optimize</option>
+          <option value="module">Convert to ModuleScript</option>
+        </select>
+        <button onclick="aiRun()">Run Local Fallback</button>
+        <button onclick="aiCopyPrompt()">📋 Copy prompt</button>
+      </div>
+      <textarea id="ai-input" placeholder="Paste code or describe what you want…"></textarea>
+      <pre id="ai-output"></pre>
+    </section>
+
+    <section class="view" id="view-studio">
+      <h1>Studio Control</h1>
+      <p style="color:var(--muted); margin-bottom:12px;">Run Luau code directly in your open Roblox Studio session.</p>
+      <div class="toolbar">
+        <button onclick="studioRun()">▶ Run in Studio</button>
+        <button onclick="studioClear()" style="background:#262a3a;">Clear</button>
+      </div>
+      <textarea id="studio-code" spellcheck="false" style="width:100%;height:40vh;font-family:monospace;font-size:14px;padding:12px;background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);resize:vertical;color:var(--text);">-- Write Luau here and click Run.
+local part = Instance.new("Part")
+part.Name = "WebPart"
+part.BrickColor = BrickColor.new("Really red")
+part.Position = Vector3.new(0, 10, 0)
+part.Parent = workspace
+print("Part created from Web Dashboard!")</textarea>
+      <h3 style="margin-top:20px;">Output</h3>
+      <pre id="studio-output" style="background:var(--bg2);padding:12px;border-radius:8px;min-height:100px;font-family:monospace;font-size:12px;white-space:pre-wrap;color:var(--ok);"></pre>
+    </section>
+
+    <section class="view" id="view-debug">
+      <div class="toolbar">
+        <button onclick="debugRefresh()">🔄 Refresh</button>
+        <button onclick="debugClear()">🗑 Clear</button>
+        <span id="debug-summary"></span>
+      </div>
+      <div class="debug-grid">
+        <div><h3>Python Output</h3><div id="debug-output" class="log"></div></div>
+        <div><h3>Errors</h3><div id="debug-errors" class="log"></div></div>
+        <div><h3>Warnings</h3><div id="debug-warnings" class="log"></div></div>
+        <div><h3>Studio Logs (Live)</h3><div id="studio-logs" class="log" style="color: var(--cyan);"></div></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-assets">
+      <div class="toolbar">
+        <input id="asset-search" placeholder="Search assets…" oninput="assetsRefresh()" />
+        <select id="asset-kind" onchange="assetsRefresh()">
+          <option value="">All</option>
+          <option value="model">Models</option>
+          <option value="image">Images</option>
+          <option value="sound">Sounds</option>
+          <option value="mesh">Meshes</option>
+        </select>
+        <button onclick="assetAdd()">＋ Add</button>
+      </div>
+      <div id="asset-list" class="asset-grid"></div>
+    </section>
+
+    <section class="view" id="view-projects">
+      <div class="toolbar">
+        <input id="proj-name" placeholder="New project name" />
+        <select id="proj-template">
+          <option value="blank">Blank</option>
+          <option value="obby">Obby</option>
+          <option value="simulator">Simulator</option>
+          <option value="rpg">RPG</option>
+          <option value="tycoon">Tycoon</option>
+          <option value="ui-kit">UI Kit</option>
+        </select>
+        <button onclick="projectCreate()">＋ Create</button>
+      </div>
+      <div id="project-list" class="list"></div>
+    </section>
+
+    <section class="view" id="view-uibuilder">
+      <div class="toolbar">
+        <button onclick="uiBuilderAdd('frame')">+ Frame</button>
+        <button onclick="uiBuilderAdd('textlabel')">+ Text</button>
+        <button onclick="uiBuilderAdd('textbutton')">+ Button</button>
+        <button onclick="uiBuilderGenerate()">⚡ Generate Luau</button>
+      </div>
+      <div class="uibuilder-grid">
+        <div id="ui-tree" class="ui-tree"></div>
+        <pre id="ui-code"></pre>
+      </div>
+    </section>
+
+    <section class="view" id="view-library">
+      <div class="toolbar">
+        <input id="lib-title" placeholder="Script title" />
+        <button onclick="librarySave()">💾 Save current editor</button>
+      </div>
+      <div id="library-list" class="list"></div>
+    </section>
+
+    <section class="view" id="view-plugins">
+      <h2>Available plugins</h2>
+      <div id="plugin-list" class="list"></div>
+    </section>
+
+    <section class="view" id="view-settings">
+      <h2>Settings</h2>
+      <label>Accent theme
+        <select id="set-accent">
+          <option value="indigo">Indigo</option>
+          <option value="cyan">Cyan</option>
+          <option value="emerald">Emerald</option>
+          <option value="amber">Amber</option>
+          <option value="crimson">Crimson</option>
+          <option value="prism">Prism</option>
+        </select>
+      </label>
+      <label>Global prompt
+        <textarea id="set-global-prompt" rows="4"></textarea>
+      </label>
+      <button onclick="settingsSave()">Save settings</button>
+    </section>
+  </main>
+</div>
+
+<script>
+// ==========================================
+// Core API & Navigation
+// ==========================================
+const API = '';
+async function apiGet(path) {
+  const r = await fetch(API + path);
+  return r.json();
+}
+async function apiPost(path, body) {
+  const r = await fetch(API + path, {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(body || {}),
+  });
+  return r.json();
+}
+
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('view-' + name)?.classList.add('active');
+  document.querySelector(`.nav-item[data-view="${name}"]`)?.classList.add('active');
+  if (name === 'debug') debugRefresh();
+  if (name === 'assets') assetsRefresh();
+  if (name === 'projects') projectsRefresh();
+  if (name === 'library') libraryRefresh();
+  if (name === 'plugins') pluginsRefresh();
+  if (name === 'dashboard') dashboardRefresh();
+  if (name === 'uibuilder') uiBuilderRefresh();
+  if (name === 'studio') document.getElementById('studio-output').textContent = "";
+}
+document.querySelectorAll('.nav-item').forEach(btn => {
+  btn.addEventListener('click', () => showView(btn.dataset.view));
+});
+
+async function pollStatus() {
+  try {
+    const s = await apiGet('/api/status');
+    const dot = document.getElementById('status-dot');
+    const txt = document.getElementById('status-text');
+    dot.className = 'dot ' + (s.studio?.place ? 'green' : s.bridge?.online ? 'yellow' : 'grey');
+    txt.textContent = s.studio?.place ? 'Studio ready' : s.bridge?.online ? 'Bridge online' : 'Offline';
+    document.getElementById('kpi-tools').textContent = (s.tools || []).length;
+  } catch { }
+}
+setInterval(pollStatus, 3000);
+pollStatus();
+
+// ==========================================
+// Dashboard
+// ==========================================
+async function dashboardRefresh() {
+  const [p, a] = await Promise.all([apiGet('/api2/projects'), apiGet('/api2/assets')]);
+  document.getElementById('kpi-projects').textContent = (p.projects || []).length;
+  document.getElementById('kpi-assets').textContent = (a.assets || []).length;
+  const recent = document.getElementById('recent-projects');
+  recent.innerHTML = (p.recent || []).map(x =>
+    `<div class="list-item"><span>${x.name}</span><span class="meta">${x.template}</span></div>`
+  ).join('') || '<div class="meta">No projects yet.</div>';
+}
+
+// ==========================================
+// Editor
+// ==========================================
+const editor = document.getElementById('editor');
+const lineNums = document.getElementById('line-nums');
+function updateLineNums() {
+  const n = editor.value.split('\n').length;
+  lineNums.textContent = Array.from({length: n}, (_, i) => i + 1).join('\n');
+}
+editor?.addEventListener('input', updateLineNums);
+editor?.addEventListener('scroll', () => lineNums.scrollTop = editor.scrollTop);
+editor?.addEventListener('keydown', e => {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    const s = editor.selectionStart, en = editor.selectionEnd;
+    editor.value = editor.value.slice(0, s) + '\t' + editor.value.slice(en);
+    editor.selectionStart = editor.selectionEnd = s + 1;
+    updateLineNums();
+  }
+});
+async function editorSave() {
+  const name = document.getElementById('doc-name').value || 'Untitled';
+  const r = await apiPost('/api2/editor/save', { name, code: editor.value });
+  if (r.ok) flash('Saved');
+}
+async function editorFormat() {
+  const r = await apiPost('/api2/editor/format', { code: editor.value });
+  if (r.ok) { editor.value = r.code; updateLineNums(); }
+}
+async function editorDiagnose() {
+  const r = await apiPost('/api2/editor/diagnostics', { code: editor.value });
+  const box = document.getElementById('editor-diags');
+  box.innerHTML = (r.diagnostics || []).map(d =>
+    `<div class="${d.severity}">L${d.line}:${d.col} — ${d.message}</div>`
+  ).join('') || '<div class="info">No issues found.</div>';
+}
+
+// ==========================================
+// AI Assistant
+// ==========================================
+async function aiRun() {
+  const action = document.getElementById('ai-action').value;
+  const input = document.getElementById('ai-input').value;
+  const r = await apiPost('/api2/ai/local', { action, input });
+  document.getElementById('ai-output').textContent = r.result || '';
+}
+async function aiCopyPrompt() {
+  const action = document.getElementById('ai-action').value;
+  const input = document.getElementById('ai-input').value;
+  const r = await apiPost('/api2/ai/prompt', { action, input });
+  await navigator.clipboard.writeText(r.prompt || '');
+  flash('Prompt copied');
+}
+
+// ==========================================
+// Studio Control
+// ==========================================
+async function studioRun() {
+  const code = document.getElementById('studio-code').value;
+  const out = document.getElementById('studio-output');
+  out.textContent = "Running...";
+  out.style.color = "var(--muted)";
+  
+  const r = await apiPost('/api2/studio/run', { code });
+  if (r.ok) {
+    out.textContent = "✅ Success!\n" + JSON.stringify(r.result, null, 2);
+    out.style.color = "var(--ok)";
+  } else {
+    out.textContent = "❌ Error:\n" + r.error;
+    out.style.color = "var(--err)";
+  }
+}
+function studioClear() {
+  document.getElementById('studio-code').value = "";
+  document.getElementById('studio-output').textContent = "";
+}
+async function studioPushProject(pid) {
+  if (!confirm("Inject all scripts from this project into your open Studio session?")) return;
+  const r = await apiPost('/api2/studio/push_project', { id: pid });
+  if (r.ok) {
+    alert(`Success! Injected ${r.result.injected} scripts.`);
+  } else {
+    alert("Failed: " + r.error);
+  }
+}
+
+// ==========================================
+// Debugging
+// ==========================================
+async function debugRefresh() {
+  const r = await apiGet('/api2/debug/errors');
+  document.getElementById('debug-summary').textContent =
+    `${r.summary?.lines || 0} lines · ${r.summary?.errors || 0} errors · ${r.summary?.warnings || 0} warnings`;
+  const out = await apiGet('/api2/debug/output');
+  document.getElementById('debug-output').innerHTML = (out.items || []).map(i =>
+    `<div class="${i.level}">[${i.ts}] ${i.msg}</div>`
+  ).join('');
+  
+  document.getElementById('debug-errors').innerHTML = (r.errors || []).map(e =>
+    `<div class="error">${e.message} <small>×${e.count}</small></div>`
+  ).join('') || '<div class="info">No errors.</div>';
+  
+  document.getElementById('debug-warnings').innerHTML = (r.warnings || []).map(w =>
+    `<div class="warning">${w.message} <small>×${w.count}</small></div>`
+  ).join('') || '<div class="info">No warnings.</div>';
+
+  try {
+    const studioLogs = await apiGet('/api2/studio/logs');
+    if (studioLogs.ok) {
+      document.getElementById('studio-logs').innerHTML = (studioLogs.logs || []).reverse().map(l => 
+        `<div style="border-bottom:1px solid #262a3a; padding:4px 0;"><span style="color:#8b90a8;">[${l.time}]</span> ${l.msg}</div>`
+      ).join('');
+    }
+  } catch(e) {}
+}
+async function debugClear() { await apiPost('/api2/debug/clear', {}); debugRefresh(); }
+
+setInterval(async () => {
+    if (document.getElementById('view-debug').classList.contains('active')) {
+        try {
+            const studioLogs = await apiGet('/api2/studio/logs');
+            if (studioLogs.ok) {
+              document.getElementById('studio-logs').innerHTML = (studioLogs.logs || []).reverse().map(l => 
+                `<div style="border-bottom:1px solid #262a3a; padding:4px 0;"><span style="color:#8b90a8;">[${l.time}]</span> ${l.msg}</div>`
+              ).join('');
+            }
+        } catch(e) {}
+    }
+}, 3000);
+
+// ==========================================
+// Assets, Projects, UI Builder, Library, Plugins
+// ==========================================
+async function assetsRefresh() {
+  const q = document.getElementById('asset-search').value;
+  const kind = document.getElementById('asset-kind').value;
+  const r = await apiGet('/api2/assets');
+  const items = (r.assets || []).filter(a =>
+    (!q || a.name.toLowerCase().includes(q.toLowerCase())) && (!kind || a.kind === kind));
+  document.getElementById('asset-list').innerHTML = items.map(a =>
+    `<div class="asset-card">
+       <div><strong>${a.name}</strong> ${a.favorite ? '<span class="fav">★</span>' : ''}</div>
+       <div class="meta">${a.kind} · ${a.assetId || 'no id'}</div>
+     </div>`
+  ).join('') || '<div class="meta">No assets.</div>';
+}
+async function assetAdd() {
+  const name = prompt('Asset name:');
+  if (!name) return;
+  const kind = prompt('Kind (model/image/sound/mesh):', 'model');
+  await apiPost('/api2/assets/add', { name, kind });
+  assetsRefresh();
+}
+
+async function projectsRefresh() {
+  const r = await apiGet('/api2/projects');
+  document.getElementById('project-list').innerHTML = (r.projects || []).map(p =>
+    `<div class="list-item">
+       <span>${p.name} <small style="color:var(--muted)">(${p.template})</small></span>
+       <button onclick="studioPushProject('${p.id}')" style="padding:4px 8px;font-size:11px;background:#22d3ee;">Inject to Studio</button>
+     </div>`
+  ).join('') || '<div class="meta">No projects yet.</div>';
+}
+async function projectCreate() {
+  const name = document.getElementById('proj-name').value;
+  const template = document.getElementById('proj-template').value;
+  if (!name) return;
+  const r = await apiPost('/api2/projects/create', { name, template });
+  if (r.ok) { document.getElementById('proj-name').value = ''; projectsRefresh(); }
+  else alert(r.error);
+}
+
+let uiTree = [];
+function uiBuilderRefresh() { renderTree(); }
+function uiBuilderAdd(type) {
+  uiTree.push({ type, props: {}, children: [] });
+  renderTree();
+}
+function renderTree() {
+  const box = document.getElementById('ui-tree');
+  box.innerHTML = uiTree.map((n, i) =>
+    `<div class="ui-node">${n.type} <button onclick="uiBuilderRemove(${i})" style="padding:2px 6px;font-size:10px;background:#ef4444;">✕</button></div>`
+  ).join('') || '<div class="meta">Empty tree. Add a component.</div>';
+}
+function uiBuilderRemove(i) { uiTree.splice(i, 1); renderTree(); }
+async function uiBuilderGenerate() {
+  const r = await apiPost('/api2/uibuilder/build', { tree: { type: 'frame', children: uiTree } });
+  document.getElementById('ui-code').textContent = r.code || '';
+}
+
+async function libraryRefresh() {
+  const r = await apiGet('/api2/library');
+  document.getElementById('library-list').innerHTML = (r.items || []).map(i =>
+    `<div class="list-item"><span>${i.title}</span><span class="meta">${i.saved}</span></div>`
+  ).join('') || '<div class="meta">No saved scripts.</div>';
+}
+async function librarySave() {
+  const title = document.getElementById('lib-title').value;
+  if (!title) return;
+  await apiPost('/api2/library/save', { title, code: editor.value });
+  libraryRefresh();
+}
+
+async function pluginsRefresh() {
+  const r = await apiGet('/api2/plugins');
+  document.getElementById('plugin-list').innerHTML = (r.available || []).map(p =>
+    `<div class="list-item">
+       <span>${p.name || p.id}</span>
+       <button onclick="pluginLoad('${p.id}')">Load</button>
+     </div>`
+  ).join('') || '<div class="meta">No plugins found in plugins/.</div>';
+}
+async function pluginLoad(id) {
+  const r = await apiPost('/api2/plugins/load', { id });
+  alert(r.ok ? 'Loaded' : r.error);
+}
+
+// ==========================================
+// Settings & Utils
+// ==========================================
+async function settingsSave() {
+  const accent = document.getElementById('set-accent').value;
+  const globalPrompt = document.getElementById('set-global-prompt').value;
+  await apiPost('/api/settings', { accentTheme: accent, globalPrompt });
+  applyAccent(accent);
+  flash('Settings saved');
+}
+function applyAccent(a) {
+  const map = {
+    indigo: ['#7c5cff', '#22d3ee'],
+    cyan: ['#22d3ee', '#38bdf8'],
+    emerald: ['#22c55e', '#14b8a6'],
+    amber: ['#f59e0b', '#f97316'],
+    crimson: ['#ef4444', '#f43f5e'],
+    prism: ['#a78bfa', '#f472b6'],
+  };
+  const [c1, c2] = map[a] || map.indigo;
+  document.documentElement.style.setProperty('--accent', c1);
+  document.documentElement.style.setProperty('--accent-2', c2);
+}
+
+function flash(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = `position:fixed;bottom:20px;right:20px;background:var(--accent);
+    color:#fff;padding:10px 16px;border-radius:8px;z-index:9999;font-size:13px;
+    box-shadow:0 10px 30px rgba(0,0,0,.4);animation:fade .2s ease;`;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 1800);
+}
+
+// ==========================================
+// Initialization
+// ==========================================
+window.addEventListener('load', () => {
+  dashboardRefresh();
+  updateLineNums();
+  editor.value = '--!strict\n-- Welcome to ZeroScript 2.0\nlocal Players = game:GetService("Players")\n\nPlayers.PlayerAdded:Connect(function(player)\n\tprint("Hi", player.Name)\nend)\n';
+  updateLineNums();
+});
+</script>
+</body>
+</html>

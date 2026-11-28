@@ -1,0 +1,6 @@
+{
+  "id": "Untitled",
+  "name": "Untitled",
+  "code": "--!strict\n-- Welcome to ZeroScript 2.0\nlocal Players = game:GetService(\"Players\")\n\nPlayers.PlayerAdded:Connect(function(player)\n\tprint(\"Hi\", player.Name)\nend)\n",
+  "updated": ""
+}

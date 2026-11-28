@@ -1,0 +1,29 @@
+{
+  "assets": [
+    {
+      "id": "30b7ee4954f5",
+      "name": "67",
+      "kind": "model",
+      "source": "",
+      "assetId": "",
+      "tags": [],
+      "favorite": false,
+      "collections": [],
+      "added": "2026-11-26 16:23:43",
+      "meta": {}
+    },
+    {
+      "id": "604733308dfd",
+      "name": "67",
+      "kind": "other",
+      "source": "",
+      "assetId": "",
+      "tags": [],
+      "favorite": false,
+      "collections": [],
+      "added": "2026-11-26 16:23:53",
+      "meta": {}
+    }
+  ],
+  "collections": []
+}

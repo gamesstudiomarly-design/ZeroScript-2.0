@@ -1,0 +1,75 @@
+{
+  "users": [],
+  "models": [],
+  "memberships": [
+    {
+      "id": "noob",
+      "name": "AI NOOB",
+      "tier": "FREE",
+      "price": "0",
+      "requestsPerDay": 30,
+      "models": "Free models",
+      "tools": "Basic tools",
+      "enabled": true
+    },
+    {
+      "id": "pro",
+      "name": "AI PRO",
+      "tier": "PAID",
+      "price": "9.99",
+      "requestsPerDay": 500,
+      "models": "Premium models",
+      "tools": "PRO tools",
+      "enabled": true
+    },
+    {
+      "id": "master",
+      "name": "AI MASTER",
+      "tier": "ULTIMATE",
+      "price": "19.99",
+      "requestsPerDay": 2500,
+      "models": "All available models",
+      "tools": "Exclusive tools",
+      "enabled": true
+    }
+  ],
+  "plugins": [],
+  "tools": [],
+  "transactions": [],
+  "announcements": [],
+  "tickets": [],
+  "featureFlags": [],
+  "betaUsers": [],
+  "admins": [],
+  "updates": [
+    {
+      "version": "4.0.0",
+      "channel": "stable",
+      "releaseDate": "11/27/2027",
+      "notes": "",
+      "status": "draft",
+      "id": "e834b9208daa"
+    }
+  ],
+  "settings": {
+    "maintenanceMode": false,
+    "defaultModel": "",
+    "storeCommission": 15,
+    "rateLimitPerMinute": 60,
+    "backupEnabled": true,
+    "ownerName": "Owner",
+    "platformName": "ZeroScript"
+  },
+  "audit": [
+    {
+      "id": "9b43db45f262",
+      "at": "2026-11-27T13:48:38+00:00",
+      "actor": "Local Owner",
+      "action": "updates created",
+      "target": "e834b9208daa",
+      "detail": ""
+    }
+  ],
+  "createdAt": "2026-11-27T13:17:32+00:00",
+  "schemaVersion": 1
+}
