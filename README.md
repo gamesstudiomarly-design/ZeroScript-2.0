@@ -1,162 +1,172 @@
-<div align="center">
+# ZeroScript - Free AI Agent for Roblox Studio
 
-# ⚡ ZeroScript 2.0
+![GitHub stars](https://img.shields.io/github/stars/sebattfg/ZeroScript-Free?style=social)
+![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-lightgrey)
+![License](https://img.shields.io/badge/license-GPL--3.0-blue)
 
-**A local AI developer tool for Roblox Studio — featuring a Python bridge, a full Web Dashboard, and a custom Studio IDE Plugin.**
+**ZeroScript** is a free browser extension that turns Claude, ChatGPT, DeepSeek, Gemini, Google AI Studio, Grok, Mistral Le Chat, Kimi, GLM, Qwen, Arena or Meta AI into a Roblox Studio AI agent.
+Control Roblox Studio with AI directly from your browser - read/edit scripts, run Luau, generate assets, all from a normal AI chat. No API key, no terminal, no coding needed.
 
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)]()
-[![License](https://img.shields.io/badge/license-GPL--3.0-blue)]()
-[![Python](https://img.shields.io/badge/python-3.9%2B-blue?logo=python)]()
+> 🌐 **Website: [zerodev.tools/zeroscript](https://zerodev.tools/zeroscript)** the free Lemonade.gg / Luamotion alternative for building Roblox games with AI.
 
-</div>
+Twelve AI providers are supported: **Claude** (claude.ai), **DeepSeek** (chat.deepseek.com, recommended), **ChatGPT** (chatgpt.com), **Google Gemini** (gemini.google.com), **Google AI Studio** (aistudio.google.com), **Grok** (grok.com), **Mistral Le Chat** (chat.mistral.ai), **Kimi** (kimi.ai), **GLM** (chat.z.ai), **Qwen** (chat.qwen.ai), **Arena** (arena.ai / lmarena.ai), and **Meta AI** (meta.ai). On ChatGPT, screenshots and image input are turned off on purpose because the free tier limits files separately from messages. On Arena, use **Direct** mode (ZeroScript blocks Start in Battle / Side-by-Side / Agent modes).
+
+> 💬 **Stuck? Join the [Discord community](https://discord.gg/9aNyZsMWcb)** get help, share feedback, and follow updates.
+
+> *Also known as: ZeroScript Roblox, ZeroScript free download, Roblox Claude agent, Roblox ChatGPT agent, Roblox DeepSeek agent, Roblox Gemini agent, Roblox Google AI Studio agent, Roblox Grok agent, Roblox Mistral agent, Roblox Kimi agent, Roblox GLM agent, Roblox Qwen agent, Roblox Arena agent, Roblox Meta AI agent, Roblox Studio AI automation, Luau AI, MCP Roblox*
+
+## ⚠️ ZeroScript is Free Beware of Paid Copycats
+
+ZeroScript is 100% free and open-source. It always has been, and it always will be. There is no official paid version, no subscription, and no sign-in required to use the extension.
+
+If you come across a site or extension using the ZeroScript name that asks for payment or account creation, it is **not** this project. The only official links are the ones listed at the top of this README.
+
+## How it works
+
+```
+AI chat (Claude / DeepSeek / ChatGPT / Gemini / Google AI Studio / Grok / Mistral / Kimi / GLM / Qwen / Arena / Meta AI) -> ZeroScript Extension -> Bridge (your PC) -> Roblox Studio
+```
+
+The extension runs inside the chat page. When you type a request, it sends commands to the Bridge running on your PC, which drives Roblox Studio through the built-in MCP server.
+
+## Setup
+
+> 📺 **Lost? Watch the [setup tutorial on YouTube](https://youtu.be/kPKiZLZ9_Ps) it covers every step below.**
+
+### 1. Download the zip and install the extension
+
+Download the latest zip from the **Releases** page and extract it. The zip contains both the **Bridge** and the **extension folder**.
+
+To load the extension:
+
+- Go to `edge://extensions` (Edge) or `chrome://extensions` (Chrome)
+- Enable **Developer mode** (top right toggle)
+- Click **Load unpacked**
+- Select the `zeroscript-extension` folder from the extracted zip
+
+### 2. Start Roblox Studio and enable MCP
+
+Open Studio and load a Place, then enable MCP (first time only):
+
+- Click **Assistant AI** in the top bar
+- Click **...** (top right of the Assistant panel)
+- Click **Manage MCP Servers**
+- Click **Enable Studio as MCP Server**
+
+> Not sure where to find these options? The [video tutorial](https://youtu.be/kPKiZLZ9_Ps) shows exactly where to click.
+
+### 3. Run ZeroScript (Desktop App & Bridge)
+
+- **Windows (recommended, no terminal):** double-click `ZeroScript.vbs` (or `start_app.bat` on first run) to open the **ZeroScript Desktop App** and system tray icon — closing the window leaves the bridge running silently in the background. *(You can still use `start.bat` if you prefer the classic terminal view.)*
+- **macOS:** double-click `MacOS_Start.command` inside the extracted folder. The first time, macOS will show a security warning ("could not verify... free of malware") - this is normal for any script downloaded outside the App Store, click **Done**, then go to **System Settings > Privacy & Security**, scroll to the bottom, and click **Open Anyway**. You only need to do this once.
+
+Once the app or window says **Bridge online**, you're ready to connect.
+
+### 4. Start a session
+
+Go to https://claude.ai, https://chat.deepseek.com, https://chatgpt.com, https://gemini.google.com, https://aistudio.google.com, https://grok.com, https://chat.mistral.ai, https://www.kimi.ai, https://chat.z.ai, https://chat.qwen.ai, https://arena.ai or https://www.meta.ai and open a new chat. The ZeroScript bar appears above the input box. Click **▶︎ Start Roblox agent**. Type what you want to build.
+
+> Works across all 12 supported AI chat sites above (including `lmarena.ai` and `www.chatgpt.com`).
+> On Arena, keep the mode dropdown on **Direct** - ZeroScript blocks Start in Battle / Side-by-Side / Agent modes.
+> If Gemini or any AI ever claims the bridge is offline mid-chat while Studio is connected, ZeroScript now automatically reminds it and refreshes instructions behind the scenes.
+### 5. Watch the setup tutorial
+
+[Watch the setup tutorial on YouTube](https://youtu.be/kPKiZLZ9_Ps)
+
+## What the AI can do
+
+- Read and edit scripts
+- Run Luau code directly in Studio
+- Inspect the game tree and instances
+- Generate meshes, materials, and models
+- Browse and insert from the Creator Store
+- Control play-testing
+- **Apply 17 specialized AAA Agent Skills** — built-in playbooks for **1:1 Game Recreation**, **AAA Animations & Motor6D Procedural Motion**, **Creature Gaits, Facial Rigs & State Machines**, **Movement/Parkour & Camera Feel**, **1:1 Map Design & Biomes**, **Zero-Trust Security, DataStores & Trading**, **Pets, Quests & Lobbies**, **1:1 Reference UI, Mobile & Gamepad UX**, UI & HUD Craftsmanship, 3D Building & Architecture, Cutscenes & Camera Choreography, Combat & VFX, Luau Architecture & Networking, NPC AI/Bosses, Lighting & Spatial Audio, Economy & Shops, and Performance Optimization (plus 1-click preset packs and custom `.md` skills)
+- **Built-in 60-Gate Luau Auditor, 19 Starter Modules, 12-Genre Style Guide & Local Project Memory** — AIs can automatically route playbooks (`route_skills`), scan scripts (`audit_luau`), pull reusable security/UI/animation modules (`get_luau_module`), inspect 12 genre design tokens (`get_style_guide`), diagnose Roblox bugs (`diagnose_bug`), and persist architecture facts (`memory_read` / `memory_write`), all also available interactively in the Desktop App's **Toolkit** tab
+
+## New in 1.9.2
+
+- **Gemini Error Auto-Recovery & Cooldown (`v1.9.2`).** Automatically detects `"I encountered an error doing what you asked. Could you try again?"` on Gemini and transient server errors across providers, automatically clicks Redo/Retry (`↻`) or sends a recovery prompt instead of halting mid-build, adds an injection cooldown (`sendDelayMs`), and blocks internal Gemini sandbox/tool calls that trigger server errors.
+
+## New in 1.9.1
+
+- **All-AI Start Button & Session Startup Fixes.** Fixed Start/Stop/menu buttons hijacking host `<form>`/`<fieldset>` submissions (`type="button"` + event isolation), fixed `startSession()` falsely reporting `Agent active` when startup sending/generation fails or returns an internal error, and added native `openNewChat()` support across all 12 AI providers.
+- **Gemini, Google AI Studio, Claude, Grok, Mistral & Kimi Fixes.** Replaced Gemini's fragile Angular `<fieldset>` mount with safe `barAnchor()`, broadened Gemini/Claude/Grok send-button & editor selectors, fixed Grok plain-text assistant turn classification, added auto-clearing of interfering Google AI Studio `Grounding with Google Search` / `URL context` chips at startup, and unified normalized multi-line editor injection across contenteditable providers.
+
+## New in 1.9.0
+
+- **60-Gate Pure-Python Luau Static Auditor (`audit_luau`).** Scans individual Luau scripts or full local folders for Remote security gaps, `UpdateAsync` yield bugs, `RBXScriptConnection` leaks, division by zero, nil receivers, and circular `require()` dependencies — directly from the Desktop App **Toolkit** tab or automatically via any connected AI.
+- **19 Battle-Tested Luau Starter Modules (`luau_modules/`).** Ready-to-use `TokenBucket`, `AttackWindow`, `RevisionTrade`, `RevisionGate`, `Finite`, `CriticalSpring`, `ModalTransition`, `HealthBinding`, `ViewportFit`, `StudioProbe`, and more via `list_luau_modules` / `get_luau_module` and in-app preview.
+- **4 New AAA Playbooks (17 Total) + Presets.** Added **Zero-Trust Security, DataStores & Trading**, **Pets, Quests, Dialogue & Matchmaking Lobbies**, **1:1 Reference UI, Mobile & Gamepad UX**, and **Creature Gaits, Facial Rigs & Anim State Machines**, plus **Security, Data & LiveOps** and **1:1 UI, Mobile & Polish** preset packs.
+- **Smart Skill Router, 12-Genre Style Vocab, Bug Recovery & Local Project Memory.** Interactive task router, 12-genre anti-slop style guide, 12 *Symptom → Probe → Repair → Retest* bug guides, 53 API gotchas, and local secret-filtered architecture memory ledger.
+
+## New in 1.8.0
+
+- **4 Overpowered AAA Playbooks (13 Total).** Added **1:1 Game Recreation & Clone Architect**, **AAA Animations, Motor6D & Procedural Motion** (code-authored live `KeyframeSequence` + 60fps `Motor6D.Transform` springs), **AAA Movement, Parkour & Camera Feel**, and **1:1 Map Design, Landmarks & Biomes**, plus **1:1 Game Cloner** and **Animations & Game Feel** preset packs.
+- **Liquid Glass Mode & Atmospheric Backdrops.** New Apple-inspired translucent blown-glass UI option in Settings with curved specular edge lensing, 4 scenic backdrops (**Sunset Skyline**, **Aurora Sky**, **Deep Ocean**, **Midnight Neon**), selectable refraction styles (**Liquid Glass**, **Frosted Dark**, **Crystal Clear**), and a 6th **Prism** accent theme.
+- **Upgraded App Motion & Utilities.** Spring transitions, cursor specular sheen, smooth `requestAnimationFrame` ambient backdrop, animated KPI counters, Activity JSON export + call copy, and `Ctrl+K` Command Palette arrow-key navigation.
+
+## New in 1.7.0
+
+- **ChatGPT & Arena Start Bar Fixes.** Hardened `chatgpt.js` with non-React `barAnchor()` placement and multi-selector editor detection (`chatgpt.com` + `www.chatgpt.com`); fixed `arena.js` across `arena.ai` / `lmarena.ai` / `chat.lmsys.org` with dual `<textarea>`/`contenteditable` support, safe dialog gating, and an actionable **`＋ New agent chat`** button on older chats.
+- **4 New AI Providers (12 Total).** Added first-class Studio agent integration for **Claude** (`claude.ai`), **Google AI Studio** (`aistudio.google.com`), **Grok** (`grok.com`), and **Mistral Le Chat** (`chat.mistral.ai`).
+- **6 New Pro Developer Playbooks + Preset Packs.** Expanded built-in skills from 3 to 9 (Combat/VFX, Luau/DataStore, NPC AI/Bosses, Lighting/Audio, Economy/Loops, Performance/Mobile) with 5 one-click loadout presets and `.md` import/export.
+- **Modern Desktop Workspace + 5 New Features.** Redesigned dark glassmorphism UI with **Live Activity Inspector**, **Prompt Studio + Global Rules Sync** across all 11 AIs, **System Health Doctor** diagnostics, **`Ctrl+K` Command Palette**, pinned AI quick-launch, and 5 selectable accent themes.
+
+## New in 1.6.0
+
+- **ZeroScript Desktop App (`ZeroScript.vbs`).** Launch ZeroScript into a clean dark desktop dashboard + system tray icon instead of keeping a terminal window open, with live Studio/Bridge telemetry, AI provider quick-launch, MCP server management, and live logs.
+- **Overpowered AI Agent Skills (`skills/`).** Built-in UI, Building, and Cutscenes playbooks plus custom skill editor in the Environment tab, synced live to connected AI tabs via `read_skill` / `list_skills`.
+- **ChatGPT reliability fixes.** Prevented `unwedgeStop()` synthetic clicks from killing the agent loop, improved thinking/warmup detection, hardened composer bar mounting and CodeMirror reading, and added support for ChatGPT Projects/Custom GPT URLs.
+
+## New in 1.5.5
+
+- **DeepSeek: the agent starts again on the new unified model.** DeepSeek merged Instant, Expert and Vision into one model and removed the model picker, which left "Start Roblox agent" stuck on "DeepSeek mode not ready". ZeroScript now recognises the new chat box, switches Search off and starts, with DeepThink left on.
+- **DeepSeek: screenshots work on every chat.** Images no longer need the Vision tab (it is gone) - the unified model sees your Studio captures, one at a time or several in a row.
+
+## New in 1.5.4
+
+- **ChatGPT: the ZeroScript bar is back above the composer.** ChatGPT redesigned its input box and renamed the layout slot the bar sits in. ZeroScript kept asking for the old name, so the browser dropped the bar into a stray strip at the bottom right of the composer and squeezed the text field to nothing. The bar now takes the right row again, and it reads the layout live instead of trusting a fixed name, so the next redesign should not knock it out.
+- **ChatGPT: long commands read cleanly on the new interface.** The same redesign replaced the code-block editor that used to hide line breaks and cut long lines off - the cause of the truncated commands fixed in 1.5.1. A 400-line block now reads back whole. If you are still on the old interface, the previous workaround is untouched.
+
+## New in 1.5.3
+
+- **Kimi moved to kimi.ai.** The old address, kimi.com, now asks for a Chinese phone number to sign in, which locked most people out. Open https://www.kimi.ai instead - the page is unchanged, the bar appears above the input box exactly as before. Reopen any Kimi tab you had on the old address.
+- **DeepSeek: the Instant model can now run the agent.** Picking Instant used to leave "Start Roblox agent" spinning forever with no explanation, because only Expert and Vision were accepted. Choose Instant before starting and the session runs on it - much faster than Expert, without the reasoning pass. Images stay off on Instant just like on Expert; the Vision tab remains the only one that can see screenshots.
+- **DeepSeek: a reply written in DeepSeek's own tool-call format no longer kills the turn.** DeepSeek occasionally answers with its internal markup instead of a ZeroScript command. Nothing recognised it, so the tool never ran, the raw tags stayed on screen and the agent stopped dead with you waiting. It is now caught, hidden behind a tool chip like any other command, and DeepSeek is told to rewrite the call properly.
+- **ChatGPT: the bar no longer clips into the composer's rounded corners.**
+
+See [CHANGELOG.md](CHANGELOG.md) for older releases.
+
+## Panel status
+
+| Dot | Meaning |
+|-----|---------|
+| Green | Bridge + Studio ready (a place is open) |
+| Yellow | Bridge OK, but Studio isn't usable yet - open Roblox Studio, load a place, or enable its MCP server (hover the dot for the exact reason) |
+| Grey | Bridge offline - open `ZeroScript.vbs` (Windows) or `MacOS_Start.command` (macOS) |
+
+## Requirements
+
+- Windows or macOS
+- Roblox Studio (MCP support built-in)
+- Microsoft Edge or Chrome
+- Python 3.9+ (installed automatically on Windows, or install it yourself on macOS - see [python.org/downloads](https://www.python.org/downloads/))
+
+## Support
+
+ZeroScript is free. If it saves you time: [Ko-fi](https://ko-fi.com/sebattfg) - Robux tip passes available in the extension panel
 
 ---
 
-## ⚠️ Why This Is on GitHub (And Not the Roblox Creator Store)
+Credit: the idea for connecting other MCP servers (Blender, Sketchfab, etc.) alongside Roblox Studio came from [javnpa](https://github.com/javnpa).
 
-Roblox's automated moderation system **false-flags** legitimate developer tools that use:
+Credit: macOS/Linux support contributed by [archivealf](https://github.com/archivealf).
 
-- **`HttpService`** — needed to talk to the local Python bridge on `127.0.0.1`
-- **`loadstring`** — needed to run test code inside the Studio IDE
+## Ultimate Admin Panel (local owner console)
 
-These are **standard features of professional developer tools**, but the automated scanner treats them the same as exploits. Many developers have faced the same "Misusing Roblox Systems" removal.
+Open **Ultimate Admin** from the ZeroScript sidebar, or navigate to `http://127.0.0.1:<app-port>/admin` while the desktop app is running. The panel adds a local admin registry for user records, model catalog metadata, membership definitions, plugin/tool listings, a transaction ledger, announcement drafts, support records, feature flags, beta cohorts, owner settings, audit entries, and JSON backup/export.
 
-**ZeroScript is 100% safe, open-source, and runs entirely on your own machine.** Nothing is sent to any external server. All communication happens on `localhost`.
+This is a **local desktop administration workspace**, not a hosted SaaS control plane. The app's HTTP server binds to `127.0.0.1`. The current Free build does not include cloud identity, live user sessions, external payment processing, provider token telemetry, multi-admin authentication/2FA, plugin package execution, or cloud announcements. Dashboard values for unavailable services remain zero or explicitly marked not connected. Never enter passwords or raw provider API secrets in the admin registry. Payment status must be verified server-side from a payment provider webhook before production access is granted.
 
-GitHub distribution is the community-standard workaround for this exact moderation issue.
-
----
-
-## 📦 What's In This Repository
-
-| File | Purpose |
-|------|---------|
-| **`AITOOLS.rar`** | Complete ZeroScript 2.0 package (Python backend + Web Dashboard + extension) |
-| **`ZeroScriptPlugin.rbxmx`** | Roblox Studio Plugin (import into Studio manually) |
-| **`README.md`** | This file — full setup guide |
-
----
-
-## ✨ Features
-
-| Component | Features |
-|-----------|----------|
-| **Web Dashboard** | Script Editor, AI Assistant, Studio Control, Debugging, Assets, Projects, UI Builder, Script Library, Plugins, Settings |
-| **Studio Plugin** | Custom IDE, Script Search, Multi-File Editor, Format Code, AI Fix, Find & Replace, Live Web Logs, Open in Studio, Run, Sync to Web, Move All to Trash |
-| **Python Bridge** | WebSocket ↔ Roblox MCP bridge, auto-restart, orphan process cleanup, live activity logging |
-| **AI Integration** | Works with DeepSeek, Claude, ChatGPT, Gemini, Grok, Kimi, Qwen, and 6 more providers |
-| **Skill System** | 17 built-in AAA playbooks (1:1 cloning, animations, security, etc.) |
-
----
-
-## 📋 Requirements
-
-| Requirement | Version | Download |
-|-------------|---------|----------|
-| **Windows** | 10 or 11 | (macOS/Linux also supported) |
-| **Roblox Studio** | Latest | [roblox.com/create](https://www.roblox.com/create) |
-| **Microsoft Edge or Chrome** | Latest | (For the Web Dashboard) |
-| **Python** | 3.9+ | [python.org/downloads](https://www.python.org/downloads/) — **⚠️ TICK "Add python.exe to PATH"** |
-| **7-Zip or WinRAR** | Any | [7-zip.org](https://www.7-zip.org/) (needed to extract `AITOOLS.rar`) |
-
-> 💡 **Pro tip:** During Python installation, the checkbox **"Add python.exe to PATH"** at the bottom of the installer is **critical**. If you miss it, `py` won't work in PowerShell.
-
----
-
-## 🚀 Full Installation (Windows / PowerShell)
-
-### **STEP 1 — Download and Extract**
-
-1. Go to the [**Releases**](../../releases/latest) page of this repository.
-2. Download **`AITOOLS.rar`** and **`ZeroScriptPlugin.rbxmx`**.
-3. Right-click `AITOOLS.rar` → **Extract All...** → Choose a folder (e.g., `C:\Users\YourName\Downloads\ZeroScript-Free`).
-4. Make sure the extracted folder contains `zeroscript-2.0\` with `app2.py`, `bridge.py`, `app_ui2\`, etc.
-
-### **STEP 2 — Verify Python is Installed**
-
-Open **PowerShell** (press `Win + X` → "Windows Terminal" or "PowerShell") and run:
-
-```powershell
-py --version
-✅ Expected: Python 3.12.x (or any 3.9+ version)
-
-❌ If you get an error: Python isn't installed or isn't in PATH. Reinstall from python.org and tick "Add python.exe to PATH".
-
-STEP 3 — Navigate to Your Project Folder
-powershell
-cd C:\Users\YourName\Downloads\ZeroScript-Free
-Replace YourName with your actual Windows username. Run echo $env:USERNAME if you're unsure.
-
-STEP 4 — Install Required Python Libraries
-powershell
-py -m pip install --user websockets PyQt6
-This installs:
-
-websockets — for the browser ↔ bridge WebSocket connection
-
-PyQt6 — for the system tray icon and window management
-
-✅ Expected: A progress bar ending with Successfully installed ...
-
-STEP 5 — Start the Application
-powershell
-py .\zeroscript-2.0\app2.py
-✅ Expected:
-
-A browser window opens automatically at http://127.0.0.1:17614/2
-
-PowerShell shows the ZeroScript Bridge banner
-
-The window stays open (this is correct — the bridge is running)
-
-⚠️ Do NOT close the PowerShell window. Minimize it instead. Closing it kills the bridge.
-
-STEP 6 — Install the Studio Plugin
-Open Roblox Studio.
-
-In the Explorer panel, right-click Workspace → Insert from File...
-
-Select ZeroScriptPlugin.rbxmx (the file you downloaded in Step 1).
-
-The script appears inside Workspace named ZeroScriptPlugin.
-
-Right-click the ZeroScriptPlugin script → Save as Local Plugin...
-
-A Windows save dialog opens (already pointing to the Roblox Plugins folder) → click Save.
-
-You can now delete the ZeroScriptPlugin script from Workspace (it's saved as a plugin).
-
-Go to the Plugins tab in Studio → click Ultimate IDE → the dark IDE panel opens on the right.
-
-STEP 7 — Enable Studio Settings
-These are required for the plugin to run code and talk to the Python backend:
-
-In Studio: Home tab → Game Settings → Security
-
-✅ Turn on Allow HTTP Requests
-
-In the Explorer, click ServerScriptService
-
-In the Properties panel, ✅ check LoadStringEnabled
-
-STEP 8 — Test Everything
-Back in the Studio plugin:
-
-Look at the bottom-left Live Console. Wait 3–5 seconds.
-
-It should turn green and say [Connected] Bridge is Online.
-
-Type test code in the editor, e.g.:
-
-lua
-local part = Instance.new("Part")
-part.BrickColor = BrickColor.new("Bright red")
-part.Position = Vector3.new(0, 10, 0)
-part.Parent = workspace
-print("Hello from ZeroScript!")
-Click ▶ Run → a red part appears in Workspace.
-
-Click ☁ Sync Web → the log appears in your Web Dashboard under 🐞 Debugging → Studio Logs.
-
-🎉 You're done!
-
+Admin registry data is created on first use in `admin_data.json` beside the application. Back up this file or use **Owner Controls → Export backup**. Existing ZeroScript workspace settings remain separate.

@@ -1,0 +1,21 @@
+# Local-only folders
+Compressed/
+Deprecated/
+ExtensionPresentation/
+presentation/
+docs/
+
+# Zip files
+*.zip
+
+# Local dev / diagnostic tools & user app state
+probe.py
+app_settings.json
+logs/
+devtools/
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+__pycache__/
